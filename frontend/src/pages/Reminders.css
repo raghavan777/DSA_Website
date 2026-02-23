@@ -1,0 +1,311 @@
+/* Reminders.css */
+
+.reminders-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    animation: slideUpFade 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reminders-hero {
+    padding: 60px 20px;
+    text-align: center;
+    color: var(--text-light);
+    position: relative;
+    overflow: hidden;
+    z-index: 1;
+}
+
+/* Faint background bell icon */
+.reminders-hero::after {
+    content: "🔔";
+    position: absolute;
+    right: 5%;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20rem;
+    opacity: 0.03;
+    pointer-events: none;
+    filter: drop-shadow(0 0 50px rgba(255, 42, 133, 0.2));
+}
+
+.rh-title {
+    font-family: var(--font-serif);
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 12px;
+    letter-spacing: -1px;
+}
+
+.rh-subtitle {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 450px;
+    margin: 0 auto;
+}
+
+.reminders-content {
+    margin: 0 auto 80px;
+    width: 100%;
+    max-width: 680px;
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    position: relative;
+    z-index: 10;
+}
+
+/* Generic Card Styles for Reminders */
+.r-card {
+    background: var(--bg-glass);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 24px;
+    padding: 32px;
+    border: 1px solid var(--border-glass);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.r-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4), 0 0 30px rgba(255, 42, 133, 0.1);
+    border-color: var(--border-glass-hover);
+}
+
+.rc-title {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--text-light);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+    letter-spacing: -0.5px;
+}
+
+.rc-subtitle {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    margin-bottom: 28px;
+    line-height: 1.6;
+}
+
+/* Card 1: Study Streak */
+.streak-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.streak-count {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 16px 24px;
+    border-radius: 20px;
+    border: 1px solid var(--border-glass);
+}
+
+.streak-number {
+    color: var(--accent-coral);
+    font-family: var(--font-sans);
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1;
+    text-shadow: 0 0 20px rgba(255, 42, 133, 0.4);
+    animation: pulseTextValue 3s infinite alternate;
+}
+
+.streak-label {
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-top: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-primary-teal {
+    width: 100%;
+    background: linear-gradient(270deg, var(--accent-emerald), #059669, var(--accent-emerald));
+    background-size: 200% auto;
+    color: white;
+    padding: 16px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 20px rgba(57, 255, 20, 0.2);
+}
+
+.btn-primary-teal:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 30px rgba(57, 255, 20, 0.4), 0 0 20px rgba(5, 150, 105, 0.3);
+    background-position: right center;
+}
+
+/* Card 2: Notification Time */
+.time-picker-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.time-input-wrap {
+    flex-grow: 1;
+    position: relative;
+}
+
+.time-input {
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 14px;
+    border: 1px solid var(--border-glass);
+    background: rgba(0, 0, 0, 0.2);
+    font-family: monospace;
+    font-size: 1.1rem;
+    color: var(--text-light);
+    outline: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+
+.time-input:focus {
+    border-color: var(--accent-coral);
+    box-shadow: 0 0 0 4px rgba(255, 42, 133, 0.15), inset 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Dark mode time picker icon (requires some browser support) */
+.time-input::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.time-input::-webkit-calendar-picker-indicator:hover {
+    opacity: 1;
+}
+
+.time-icon {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.btn-primary-coral {
+    background: linear-gradient(135deg, var(--accent-coral), #dc2626);
+    color: white;
+    padding: 16px 32px;
+    border-radius: 14px;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 10px 20px rgba(255, 42, 133, 0.2);
+}
+
+.btn-primary-coral:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 25px rgba(255, 42, 133, 0.3), 0 0 20px rgba(255, 42, 133, 0.4);
+}
+
+.notification-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-secondary {
+    background: var(--bg-glass);
+    border: 1px solid var(--border-glass);
+    padding: 12px 20px;
+    border-radius: 12px;
+    color: var(--text-light);
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 42, 133, 0.1);
+    border-color: rgba(255, 42, 133, 0.3);
+    color: #fca5a5;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(255, 42, 133, 0.15);
+}
+
+/* Card 3: Tips */
+.tips-list {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-top: 24px;
+    border-top: 1px solid var(--border-glass);
+    padding-top: 24px;
+}
+
+.tip-item {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+}
+
+.tip-icon {
+    font-size: 1.8rem;
+    margin-top: 2px;
+    background: rgba(255, 255, 255, 0.05);
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 16px;
+    border: 1px solid var(--border-glass);
+}
+
+.tip-content {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.tip-title {
+    font-weight: 700;
+    color: var(--text-light);
+    font-size: 1.05rem;
+}
+
+.tip-desc {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+    .rh-title {
+        font-size: 2.8rem;
+    }
+
+    .time-picker-row {
+        flex-direction: column;
+    }
+
+    .btn-primary-coral {
+        width: 100%;
+    }
+}
