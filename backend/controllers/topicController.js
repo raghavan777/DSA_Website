@@ -83,6 +83,8 @@ export const toggleProblemCompletion = async (req, res) => {
         await progress.save();
 
         // If problem was just marked as COMPLETED, update streak (once per day)
+        let streakUpdated = false;
+        let newStreak = 0;
         if (!isCompleted) {
             try {
                 const user = await User.findById(userId);
@@ -107,6 +109,8 @@ export const toggleProblemCompletion = async (req, res) => {
                         user.streak += streakIncrement;
                         user.lastStudiedDate = new Date();
                         await user.save();
+                        streakUpdated = true;
+                        newStreak = user.streak;
                     }
                 }
             } catch (streakErr) {
@@ -122,7 +126,7 @@ export const toggleProblemCompletion = async (req, res) => {
             completed: completedSet.has(prob._id.toString()),
         }));
 
-        res.json(topicObj);
+        res.json({ ...topicObj, streakUpdated, newStreak });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

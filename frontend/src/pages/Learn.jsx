@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Navbar from "../components/Navbar";
+import StreakCelebration from "../components/StreakCelebration";
 import { getTopics } from "../services/api";
 import "./Learn.css";
 import {
@@ -8,7 +9,7 @@ import {
     Folders, Link, Layers, Trees, Network,
     Search, Maximize, Puzzle, Mic, X, Play
 } from "lucide-react";
-import { toggleProblemCompletion, updateStreak } from "../services/api";
+import { toggleProblemCompletion } from "../services/api";
 
 const ARRAYS_AND_STRINGS_FALLBACK = [
     {
@@ -514,6 +515,8 @@ const Learn = () => {
     const [topics, setTopics] = useState([]);
     const [loading, setLoading] = useState(true);
     const [selectedTopic, setSelectedTopic] = useState(null);
+    const [showCelebration, setShowCelebration] = useState(false);
+    const [celebrationStreak, setCelebrationStreak] = useState(0);
 
     useEffect(() => {
         getTopics()
@@ -541,16 +544,10 @@ const Learn = () => {
                 setSelectedTopic(res.data);
             }
 
-            // If problem was just marked as COMPLETED, update streak (best-effort)
-            if (!wasCompleted) {
-                try {
-                    await updateStreak();
-                } catch (streakErr) {
-                    // 400 = already studied today, which is fine
-                    if (streakErr.response?.status !== 400) {
-                        console.error("Streak update failed", streakErr);
-                    }
-                }
+            // If streak was updated by the backend, show celebration
+            if (!wasCompleted && res.data.streakUpdated) {
+                setCelebrationStreak(res.data.newStreak);
+                setShowCelebration(true);
             }
         } catch (err) {
             console.error("Failed to toggle problem", err);
@@ -732,6 +729,13 @@ const Learn = () => {
                 onClose={() => setSelectedTopic(null)}
                 onToggleProblem={handleToggleProblem}
             />
+
+            {showCelebration && (
+                <StreakCelebration
+                    streak={celebrationStreak}
+                    onComplete={() => setShowCelebration(false)}
+                />
+            )}
         </div>
     );
 };

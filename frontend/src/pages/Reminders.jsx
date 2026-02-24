@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Navbar from "../components/Navbar";
+import StreakCelebration from "../components/StreakCelebration";
 import { getUserProfile, updateStreak, updateNotificationSettings } from "../services/api";
 import { startNotificationScheduler, stopNotificationScheduler } from "../utils/notificationScheduler";
 import "./Reminders.css";
@@ -12,6 +13,8 @@ const Reminders = () => {
     const [notifEnabled, setNotifEnabled] = useState(false);
     const [deferredPrompt, setDeferredPrompt] = useState(null);
     const [userName, setUserName] = useState("");
+    const [showCelebration, setShowCelebration] = useState(false);
+    const [celebrationStreak, setCelebrationStreak] = useState(0);
 
     useEffect(() => {
         // Fetch User Profile on Mount
@@ -69,6 +72,8 @@ const Reminders = () => {
             const res = await updateStreak();
             setStreak(res.data.streak);
             setAlreadyStudied(true);
+            setCelebrationStreak(res.data.streak);
+            setShowCelebration(true);
         } catch (err) {
             if (err.response && err.response.status === 400) {
                 // Backend caught it (Already studied today)
@@ -268,6 +273,13 @@ const Reminders = () => {
                 </div>
 
             </main>
+
+            {showCelebration && (
+                <StreakCelebration
+                    streak={celebrationStreak}
+                    onComplete={() => setShowCelebration(false)}
+                />
+            )}
         </div>
     );
 };
